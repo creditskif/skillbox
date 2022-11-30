@@ -45,52 +45,82 @@ from random import randint
 class House:
 
     def __init__(self):
-        pass
+        self.money = 1000
+        self.food = 50
+        self.dirt = 0
 
+class Human:
+    def __init__(self, name):
+        self.name = name
+        self.fullness = 30
+        self.happiness = 100
+    def eat(self):
+        eat_now = randint(0, 30)
+        self.fullness += eat_now
+        self.house.food -= eat_now
+        return "{} покушал. Сытость - {}, еды в доме - {}".format(self.name, self.fullness, self.house.food)
 
-class Husband:
+class Husband(Human):
+    rate_fullness = 10
 
-    def __init__(self):
-        pass
+    def __init__(self, name):
+        super().__init__(name=name)
 
     def __str__(self):
         return super().__str__()
 
     def act(self):
-        pass
+        if self.fullness < 0:
+            return "{} умер от голода" .format(self.name)
+        if self.happiness < 10:
+            return "{} умер от депрессии".format(self.name)
+        if self.fullness < 10:
+            self.eat()
+        dice = randint(1, 8)
 
-    def eat(self):
-        pass
 
     def work(self):
-        pass
+        self.fullness -= Husband.rate_fullness
+        self.house.money += 150
+
 
     def gaming(self):
-        pass
+        self.fullness -= Husband.rate_fullness
+        self.happiness += 20
 
 
-class Wife:
-
-    def __init__(self):
-        pass
+class Wife(Human):
+    rate_fullness = 10
+    def __init__(self, name):
+        super().__init__(name=name)
 
     def __str__(self):
         return super().__str__()
 
     def act(self):
-        pass
-
-    def eat(self):
-        pass
+        if self.fullness < 10:
+            self.eat()
+        elif self.fullness < 0:
+            return "{} умерла от голода".format(self.name)
+        elif self.happiness < 10:
+            return "{} умерла от депрессии".format(self.name)
 
     def shopping(self):
-        pass
+        self.fullness -= Wife.rate_fullness
+        self.house.food += 30
+        self.house.money -= 30
 
     def buy_fur_coat(self):
-        pass
+        self.house.money -= 350
+        self.fullness -= Wife.rate_fullness
+        self.happiness += 60
 
     def clean_house(self):
-        pass
+        self.fullness -= Wife.rate_fullness
+        if self.house.dirt >= 100:
+            self.house.dirt -= 100
+        else:
+            self.house.dirt = 0
 
 
 home = House()
